@@ -11,7 +11,7 @@ const CarDetailsPage = () => {
         Details for car with ID: {id}
       </p>
 
-      <button className="px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition">
+      <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-green-700 transition">
         Book Now
       </button>
     </div>
