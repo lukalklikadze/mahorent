@@ -1,59 +1,79 @@
+import { useState, useEffect } from "react";
 import HotelCard from "../components/hotelCard";
-import HotelPhoto from "../assets/HotelSample.jpg";
+import { translations } from "../translations";
+import useLanguage from "../hooks/useLanguage";
+import { hotelAPI, type Hotel } from "../API";
 
 const HotelsPage = () => {
-  const hotels = [
-    {
-      photo: HotelPhoto,
-      name: "Grand Tbilisi Hotel",
-      location: "Tbilisi",
-      bedrooms: "3",
-      beds: "4",
-      bathrooms: "2",
-      prevPrice: "$150",
-      newPrice: "$120",
-      tagline: "In the very center of the city",
-    },
-    {
-      photo: HotelPhoto,
-      name: "Batumi Beach Resort",
-      location: "Batumi",
-      bedrooms: "2",
-      beds: "3",
-      bathrooms: "1",
-      prevPrice: "$200",
-      newPrice: "$170",
-      tagline: "Steps away from the beach",
-    },
-    {
-      photo: HotelPhoto,
-      name: "Kutaisi Grand Palace",
-      location: "Kutaisi",
-      bedrooms: "4",
-      beds: "5",
-      bathrooms: "3",
-      prevPrice: "$180",
-      newPrice: "$150",
-      tagline: "Luxury stay in the heart of the city",
-    },
-  ];
+  const { lang } = useLanguage();
+  const t = translations[lang];
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        setLoading(true);
+        const fetchedHotels = await hotelAPI.getAll();
+        setHotels(fetchedHotels);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch hotels");
+        console.error("Error fetching hotels:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHotels();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl">Loading hotels...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-yellow-50 to-white p-6">
       <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
-        Our Hotels
+        {t.ourHotels}
       </h1>
-
       <p className="text-gray-600 text-base md:text-lg mb-10 text-center max-w-2xl">
-        Discover the best hotels for your stay in Georgia. From luxury resorts
-        to cozy city hotels, find the perfect accommodation for your trip.
+        {t.hotelsDescription}
       </p>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
-        {hotels.map((hotel, index) => (
-          <HotelCard id={`hotel-${index}`} key={index} {...hotel} />
+        {hotels.map((hotel) => (
+          <HotelCard
+            id={hotel._id!}
+            key={hotel._id}
+            photo={hotel.photo}
+            name={hotel.name}
+            location={hotel.location}
+            bedrooms={hotel.bedrooms}
+            beds={hotel.beds}
+            bathrooms={hotel.bathrooms}
+            prevPrice={hotel.prevPrice}
+            newPrice={hotel.newPrice}
+            tagline={hotel.tagline}
+          />
         ))}
       </div>
+      {hotels.length === 0 && (
+        <div className="text-center text-gray-500 mt-8">
+          No hotels available at the moment.
+        </div>
+      )}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import ToursPage from "./pages/toursPage";
 import TourDetailsPage from "./components/tourDetails";
 import Footer from "./components/footer";
 import TranslationWidget from "./components/translationWidget";
+import AdminPanel from "./pages/adminPanel";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/hotels/:id" element={<HotelDetailsPage />} />
           <Route path="/tours" element={<ToursPage />} />
           <Route path="/tours/:id" element={<TourDetailsPage />} />
+          <Route path="/secret-admin-panel-andria22" element={<AdminPanel />} />
         </Routes>
       </main>
       <FloatingWhatsApp />

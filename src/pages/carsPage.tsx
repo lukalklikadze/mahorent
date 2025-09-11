@@ -1,58 +1,78 @@
+import { useState, useEffect } from "react";
 import CarCard from "../components/carCard";
-import Tesla from "../assets/Tesla.jpg";
+import { translations } from "../translations";
+import useLanguage from "../hooks/useLanguage";
+import { carAPI, type Car } from "../API";
+
 const CarsPage = () => {
-  // Example data (you can replace with API or DB later)
-  const cars = [
-    {
-      photo: Tesla,
-      name: "Toyota Prius",
-      location: "Tbilisi",
-      gearsType: "Automatic",
-      steeringWheelSide: "Left",
-      fuel: "Hybrid",
-      prevPrice: "$40/day",
-      newPrice: "$30/day",
-    },
-    {
-      photo: Tesla,
-      name: "Hyundai Tucson",
-      location: "Batumi",
-      gearsType: "Automatic",
-      steeringWheelSide: "Left",
-      fuel: "Petrol",
-      prevPrice: "$60/day",
-      newPrice: "$45/day",
-    },
-    {
-      photo: Tesla,
-      name: "Mercedes-Benz C-Class",
-      location: "Kutaisi",
-      gearsType: "Automatic",
-      steeringWheelSide: "Left",
-      fuel: "Diesel",
-      prevPrice: "$90/day",
-      newPrice: "$70/day",
-    },
-  ];
+  const { lang } = useLanguage();
+  const t = translations[lang];
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        setLoading(true);
+        const fetchedCars = await carAPI.getAll();
+        setCars(fetchedCars);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch cars");
+        console.error("Error fetching cars:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl">Loading cars...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white p-6">
       <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
-        Our Cars
+        {t.ourCars}
       </h1>
-
       <p className="text-gray-600 text-base md:text-lg mb-10 text-center max-w-2xl">
-        Choose from a wide range of comfortable, reliable, and affordable cars
-        for your journey across Georgia. Whether it’s for city rides or mountain
-        trips, we’ve got you covered.
+        {t.carsDescription}
       </p>
-
-      {/* Responsive grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
-        {cars.map((car, index) => (
-          <CarCard id={"tesla"} key={index} {...car} />
+        {cars.map((car) => (
+          <CarCard
+            id={car._id!}
+            key={car._id}
+            photo={car.photo}
+            name={car.name}
+            location={car.location}
+            gearsType={car.gearsType}
+            steeringWheelSide={car.steeringWheelSide}
+            fuel={car.fuel}
+            prevPrice={car.prevPrice}
+            newPrice={car.newPrice}
+          />
         ))}
       </div>
+      {cars.length === 0 && (
+        <div className="text-center text-gray-500 mt-8">
+          No cars available at the moment.
+        </div>
+      )}
     </div>
   );
 };

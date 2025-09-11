@@ -4,53 +4,19 @@ import TelegramLogo from "../assets/Telegram.svg";
 import SocialsContact from "./socialsContact";
 import logoSrc from "../assets/MahorentLogo.png";
 import { useEffect, useState } from "react";
+import { translations } from "../translations";
+import useLanguage from "../hooks/useLanguage";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { lang } = useLanguage();
   const whatsappUrl = "https://wa.me/995597561305?text=Hello%20there";
   const telegramUrl = "https://t.me/Guido_Gallagher";
   const whatsappName = "(+995) 597 56 13 05";
   const telegramName = "@Maho_Travel";
   const [typedText, setTypedText] = useState("");
 
-  const welcomeMessages = {
-    en: "Welcome to Maho Travel!",
-    ka: "კეთილი იყოს თქვენი მობრძანება Maho Travel-ში!",
-    ru: "Добро пожаловать в Maho Travel!",
-  };
-
-  const getCurrentLanguage = () => {
-    const cookies = document.cookie.split(";");
-    const googtransCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("googtrans=")
-    );
-
-    if (googtransCookie) {
-      const value = googtransCookie.split("=")[1];
-      const match = value.match(/\/en\/(.+)/);
-      if (match) {
-        return match[1];
-      }
-    }
-    return "en";
-  };
-
-  const [currentLang, setCurrentLang] = useState(() => getCurrentLanguage());
-  const fullText =
-    welcomeMessages[currentLang as keyof typeof welcomeMessages] ||
-    welcomeMessages.en;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newLang = getCurrentLanguage();
-      if (newLang !== currentLang) {
-        setCurrentLang(newLang);
-        setTypedText("");
-      }
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, [currentLang]);
+  const fullText = translations[lang].welcome;
 
   useEffect(() => {
     setTypedText("");
@@ -69,13 +35,7 @@ const Header = () => {
   }, [fullText]);
 
   return (
-    <header
-      className="w-full fixed top-0 left-0 z-50
-        bg-white/30 backdrop-blur-md border-b border-white/20
-        flex flex-col md:flex-row items-center
-        py-2 px-3 sm:px-4 md:px-6 lg:px-6 shadow-sm
-        gap-2 md:gap-0"
-    >
+    <header className="w-full fixed top-0 left-0 z-50 bg-white/30 backdrop-blur-md border-b border-white/20 flex flex-col md:flex-row items-center py-2 px-3 sm:px-4 md:px-6 lg:px-6 shadow-sm gap-2 md:gap-0">
       <div className="flex items-center justify-between w-full md:w-auto">
         <button
           onClick={() => {
@@ -117,17 +77,9 @@ const Header = () => {
           />
         </div>
       </div>
-
-      <span
-        className="text-center md:text-left md:ml-4
-          text-sm sm:text-base md:text-xl lg:text-2xl
-          font-bold text-gray-800
-          whitespace-nowrap overflow-hidden
-          notranslate"
-      >
+      <span className="text-center md:text-left md:ml-4 text-sm sm:text-base md:text-xl lg:text-2xl font-bold text-gray-800 whitespace-nowrap overflow-hidden">
         {typedText}
       </span>
-
       <div className="hidden md:flex ml-auto items-center gap-x-3">
         <SocialsContact
           logo={<img src={WhatsappLogo} className="h-6 w-6" alt="WhatsApp" />}
