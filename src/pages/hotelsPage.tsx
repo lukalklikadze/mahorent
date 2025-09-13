@@ -57,7 +57,7 @@ const HotelsPage = () => {
           <HotelCard
             id={hotel._id!}
             key={hotel._id}
-            photo={hotel.photo}
+            photo={hotel.photos[0]}
             name={hotel.name}
             location={hotel.location}
             bedrooms={hotel.bedrooms}

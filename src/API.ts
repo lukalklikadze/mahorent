@@ -9,7 +9,8 @@ export interface Car {
   fuel: string;
   prevPrice: string;
   newPrice: string;
-  photo: string;
+  photos: string[];
+  bookedDates?: string[];
 }
 
 export interface Hotel {
@@ -21,7 +22,7 @@ export interface Hotel {
   bathrooms: string;
   prevPrice: string;
   newPrice: string;
-  photo: string;
+  photos: string[];
   tagline?: string;
 }
 
@@ -30,7 +31,7 @@ export interface Tour {
   name: string;
   prevPrice: string;
   newPrice: string;
-  photo: string;
+  photos: string[];
 }
 
 export const carAPI = {
@@ -60,6 +61,20 @@ export const carAPI = {
     });
     if (!response.ok) {
       throw new Error("Failed to create car");
+    }
+    return response.json();
+  },
+
+  book: async (id: string, dates: string[]): Promise<Car> => {
+    const response = await fetch(`${API_BASE_URL}/cars/${id}/book`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dates }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to book car");
     }
     return response.json();
   },

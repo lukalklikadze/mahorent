@@ -57,7 +57,7 @@ const ToursPage = () => {
           <TourCard
             id={tour._id!}
             key={tour._id}
-            photo={tour.photo}
+            photo={tour.photos[0]}
             name={tour.name}
             prevPrice={tour.prevPrice}
             newPrice={tour.newPrice}

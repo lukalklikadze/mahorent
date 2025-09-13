@@ -23,7 +23,8 @@ const carSchema = new mongoose.Schema({
   fuel: String,
   prevPrice: String,
   newPrice: String,
-  photo: String,
+  photos: { type: [String], default: [] },
+  bookedDates: { type: [String], default: [] },
 });
 
 const hotelSchema = new mongoose.Schema({
@@ -34,7 +35,7 @@ const hotelSchema = new mongoose.Schema({
   bathrooms: String,
   prevPrice: String,
   newPrice: String,
-  photo: String,
+  photos: { type: [String], default: [] },
   tagline: String,
 });
 
@@ -42,7 +43,7 @@ const tourSchema = new mongoose.Schema({
   name: String,
   prevPrice: String,
   newPrice: String,
-  photo: String,
+  photos: { type: [String], default: [] },
 });
 
 const Car = mongoose.model("Car", carSchema);
@@ -137,6 +138,22 @@ app.post("/api/tours", async (req, res) => {
     const newTour = new Tour(req.body);
     await newTour.save();
     res.json(newTour);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/cars/:id/book", async (req, res) => {
+  try {
+    const { dates } = req.body;
+    const car = await Car.findById(req.params.id);
+    if (!car) return res.status(404).json({ error: "Car not found" });
+
+    car.bookedDates.push(...dates);
+    car.bookedDates = [...new Set(car.bookedDates)];
+    await car.save();
+
+    res.json(car);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
