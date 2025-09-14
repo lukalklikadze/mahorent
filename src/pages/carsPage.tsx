@@ -45,7 +45,7 @@ const CarsPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen c p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen c bg-gradient-to-b from-blue-50 to-white p-6">
       <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
         {t.ourCars}
       </h1>

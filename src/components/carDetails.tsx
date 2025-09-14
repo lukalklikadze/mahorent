@@ -104,7 +104,7 @@ const CarDetailsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        <div className="text-xl">{t.loading || "Loading..."}</div>
+        <div className="text-xl text-blue-800">{t.loading || "Loading..."}</div>
       </div>
     );
   }
@@ -136,13 +136,13 @@ const CarDetailsPage = () => {
       <div className="max-w-7xl mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="mb-6 px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition transform hover:scale-105 text-sm sm:text-base font-medium mt-3"
+          className="mb-6 px-6 py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition transform hover:scale-105 text-sm sm:text-base font-medium mt-3"
         >
           {t.back || "Back"}
         </button>
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4">
             {car.name}
           </h1>
           <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
@@ -152,7 +152,7 @@ const CarDetailsPage = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 h-fit">
+          <div className="bg-white rounded-2xl shadow-lg p-6 h-fit border-2 border-blue-100">
             <div className="relative mb-6 group">
               <img
                 src={currentPhoto}
@@ -164,7 +164,7 @@ const CarDetailsPage = () => {
                 <>
                   <button
                     onClick={handlePreviousPhoto}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100"
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-800 bg-opacity-70 hover:bg-opacity-90 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100"
                     aria-label="Previous photo"
                   >
                     <svg
@@ -184,7 +184,7 @@ const CarDetailsPage = () => {
 
                   <button
                     onClick={handleNextPhoto}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-800 bg-opacity-70 hover:bg-opacity-90 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100"
                     aria-label="Next photo"
                   >
                     <svg
@@ -209,7 +209,7 @@ const CarDetailsPage = () => {
                         onClick={() => setCurrentPhotoIndex(index)}
                         className={`w-2 h-2 rounded-full transition-all duration-200 ${
                           index === currentPhotoIndex
-                            ? "bg-white"
+                            ? "bg-blue-400"
                             : "bg-white bg-opacity-50 hover:bg-opacity-70"
                         }`}
                         aria-label={`Go to photo ${index + 1}`}
@@ -217,7 +217,7 @@ const CarDetailsPage = () => {
                     ))}
                   </div>
 
-                  <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white text-sm px-3 py-1 rounded-full">
+                  <div className="absolute top-4 right-4 bg-blue-800 bg-opacity-70 text-white text-sm px-3 py-1 rounded-full">
                     {currentPhotoIndex + 1} / {car.photos.length}
                   </div>
                 </>
@@ -225,12 +225,12 @@ const CarDetailsPage = () => {
             </div>
 
             <div className="mb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-gray-800">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-blue-800">
                 {car.name}
               </h2>
               <p className="text-gray-600 mb-4 text-sm sm:text-base flex items-center">
                 <svg
-                  className="w-4 h-4 mr-2"
+                  className="w-4 h-4 mr-2 text-blue-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -252,14 +252,14 @@ const CarDetailsPage = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
               <div className="flex items-center gap-3 justify-center sm:justify-start">
                 <img
                   src={GasLogo}
                   alt="Fuel"
                   className="w-6 h-6 sm:w-8 sm:h-8"
                 />
-                <span className="text-sm sm:text-base font-medium">
+                <span className="text-sm sm:text-base font-medium text-blue-800">
                   {getTranslatedFuel(car.fuel)}
                 </span>
               </div>
@@ -269,7 +269,7 @@ const CarDetailsPage = () => {
                   alt="Gears"
                   className="w-6 h-6 sm:w-8 sm:h-8"
                 />
-                <span className="text-sm sm:text-base font-medium">
+                <span className="text-sm sm:text-base font-medium text-blue-800">
                   {getTranslatedGears(car.gearsType)}
                 </span>
               </div>
@@ -279,25 +279,25 @@ const CarDetailsPage = () => {
                   alt="Steering"
                   className="w-6 h-6 sm:w-8 sm:h-8"
                 />
-                <span className="text-sm sm:text-base font-medium">
+                <span className="text-sm sm:text-base font-medium text-blue-800">
                   {getTranslatedSteering(car.steeringWheelSide)}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center justify-center sm:justify-start gap-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl">
+            <div className="flex items-center justify-center sm:justify-start gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
               <span className="text-base sm:text-lg text-red-500 line-through">
                 {car.prevPrice}
               </span>
-              <span className="text-xl sm:text-2xl text-green-600 font-bold">
+              <span className="text-xl sm:text-2xl text-blue-600 font-bold">
                 {car.newPrice}
               </span>
               <span className="text-sm text-gray-600">/ {t.day || "day"}</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800 text-center">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-100">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-blue-800 text-center">
               {t.selectDates || "Select Dates"}
             </h2>
 
@@ -310,21 +310,21 @@ const CarDetailsPage = () => {
             {selectedDates.length > 0 && (
               <div className="mb-6 mt-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-sm sm:text-base text-gray-800">
+                  <h3 className="font-semibold text-sm sm:text-base text-blue-800">
                     {t.selectedDates || "Selected Dates"}:
                   </h3>
                   <button
                     onClick={handleClearSelectedDates}
-                    className="px-3 py-1 text-xs sm:text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition font-medium"
+                    className="px-3 py-1 text-xs sm:text-sm bg-blue-200 text-blue-800 rounded-md hover:bg-blue-300 transition font-medium"
                   >
                     {t.clearAll || "Clear All"}
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-4 max-h-32 overflow-y-auto p-3 bg-gray-50 rounded-lg">
+                <div className="flex flex-wrap gap-2 mb-4 max-h-32 overflow-y-auto p-3 bg-blue-50 rounded-lg border border-blue-200">
                   {selectedDates.map((date, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm font-medium"
+                      className="px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-xs sm:text-sm font-medium"
                     >
                       {date.toLocaleDateString()}
                     </span>
@@ -333,22 +333,26 @@ const CarDetailsPage = () => {
               </div>
             )}
 
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-semibold mb-3 text-sm text-gray-800">
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <h4 className="font-semibold mb-3 text-sm text-blue-800">
                 {t.legend || "Legend"}:
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-red-500 rounded"></div>
-                  <span>{t.booked || "Booked"}</span>
+                  <span className="text-gray-700">{t.booked || "Booked"}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-500 rounded"></div>
-                  <span>{t.selected || "Selected"}</span>
+                  <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                  <span className="text-gray-700">
+                    {t.selected || "Selected"}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-gray-200 border border-gray-300 rounded"></div>
-                  <span>{t.available || "Available"}</span>
+                  <span className="text-gray-700">
+                    {t.available || "Available"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -358,11 +362,11 @@ const CarDetailsPage = () => {
               disabled={selectedDates.length === 0 || booking}
               className={`w-full py-4 px-6 font-bold rounded-xl transition text-sm sm:text-base ${
                 selectedDates.length > 0 && !booking
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 shadow-lg"
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 shadow-lg"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              {booking ? t.booking || "Booking..." : t.bookNow}
+              {booking ? t.booking || "Booking..." : t.bookNow || "Book Now"}
             </button>
 
             {selectedDates.length === 0 && (

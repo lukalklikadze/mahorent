@@ -24,6 +24,7 @@ export interface Hotel {
   newPrice: string;
   photos: string[];
   tagline?: string;
+  bookedDates?: string[];
 }
 
 export interface Tour {
@@ -32,6 +33,8 @@ export interface Tour {
   prevPrice: string;
   newPrice: string;
   photos: string[];
+  destinations?: string[];
+  bookedDates?: string[];
 }
 
 export const carAPI = {
@@ -110,6 +113,20 @@ export const hotelAPI = {
     }
     return response.json();
   },
+
+  book: async (id: string, dates: string[]): Promise<Hotel> => {
+    const response = await fetch(`${API_BASE_URL}/hotels/${id}/book`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dates }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to book hotel");
+    }
+    return response.json();
+  },
 };
 
 export const tourAPI = {
@@ -139,6 +156,20 @@ export const tourAPI = {
     });
     if (!response.ok) {
       throw new Error("Failed to create tour");
+    }
+    return response.json();
+  },
+
+  book: async (id: string, dates: string[]): Promise<Tour> => {
+    const response = await fetch(`${API_BASE_URL}/tours/${id}/book`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dates }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to book tour");
     }
     return response.json();
   },

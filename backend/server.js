@@ -37,6 +37,7 @@ const hotelSchema = new mongoose.Schema({
   newPrice: String,
   photos: { type: [String], default: [] },
   tagline: String,
+  bookedDates: { type: [String], default: [] },
 });
 
 const tourSchema = new mongoose.Schema({
@@ -44,12 +45,15 @@ const tourSchema = new mongoose.Schema({
   prevPrice: String,
   newPrice: String,
   photos: { type: [String], default: [] },
+  destinations: { type: [String], default: [] },
+  bookedDates: { type: [String], default: [] },
 });
 
 const Car = mongoose.model("Car", carSchema);
 const Hotel = mongoose.model("Hotel", hotelSchema);
 const Tour = mongoose.model("Tour", tourSchema);
 
+// Car endpoints
 app.get("/api/cars", async (req, res) => {
   try {
     const cars = await Car.find();
@@ -76,6 +80,22 @@ app.post("/api/cars", async (req, res) => {
     const newCar = new Car(req.body);
     await newCar.save();
     res.json(newCar);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/cars/:id/book", async (req, res) => {
+  try {
+    const { dates } = req.body;
+    const car = await Car.findById(req.params.id);
+    if (!car) return res.status(404).json({ error: "Car not found" });
+
+    car.bookedDates.push(...dates);
+    car.bookedDates = [...new Set(car.bookedDates)];
+    await car.save();
+
+    res.json(car);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -112,6 +132,22 @@ app.post("/api/hotels", async (req, res) => {
   }
 });
 
+app.post("/api/hotels/:id/book", async (req, res) => {
+  try {
+    const { dates } = req.body;
+    const hotel = await Hotel.findById(req.params.id);
+    if (!hotel) return res.status(404).json({ error: "Hotel not found" });
+
+    hotel.bookedDates.push(...dates);
+    hotel.bookedDates = [...new Set(hotel.bookedDates)];
+    await hotel.save();
+
+    res.json(hotel);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get("/api/tours", async (req, res) => {
   try {
     const tours = await Tour.find();
@@ -143,17 +179,17 @@ app.post("/api/tours", async (req, res) => {
   }
 });
 
-app.post("/api/cars/:id/book", async (req, res) => {
+app.post("/api/tours/:id/book", async (req, res) => {
   try {
     const { dates } = req.body;
-    const car = await Car.findById(req.params.id);
-    if (!car) return res.status(404).json({ error: "Car not found" });
+    const tour = await Tour.findById(req.params.id);
+    if (!tour) return res.status(404).json({ error: "Tour not found" });
 
-    car.bookedDates.push(...dates);
-    car.bookedDates = [...new Set(car.bookedDates)];
-    await car.save();
+    tour.bookedDates.push(...dates);
+    tour.bookedDates = [...new Set(tour.bookedDates)];
+    await tour.save();
 
-    res.json(car);
+    res.json(tour);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

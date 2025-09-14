@@ -8,12 +8,14 @@ type BookingCalendarProps = {
   bookedDates: string[];
   onDatesChange: (dates: Date[]) => void;
   selectedDates: Date[];
+  singleDateMode?: boolean;
 };
 
 const BookingCalendar = ({
   bookedDates,
   onDatesChange,
   selectedDates,
+  singleDateMode = false,
 }: BookingCalendarProps) => {
   const isDateBooked = (date: Date): boolean => {
     const dateString = date.toISOString().split("T")[0];
@@ -29,19 +31,22 @@ const BookingCalendar = ({
   const handleDateChange = (value: Value | [ValuePiece, ValuePiece]) => {
     if (!value) return;
 
-    // Handle single date selection (not range)
     if (value instanceof Date && !isDateBooked(value)) {
-      const isAlreadySelected = selectedDates.some(
-        (date) => date.toDateString() === value.toDateString()
-      );
+      if (singleDateMode) {
+        onDatesChange([value]);
+      } else {
+        const isAlreadySelected = selectedDates.some(
+          (date) => date.toDateString() === value.toDateString()
+        );
 
-      const newSelectedDates = isAlreadySelected
-        ? selectedDates.filter(
-            (date) => date.toDateString() !== value.toDateString()
-          )
-        : [...selectedDates, value];
+        const newSelectedDates = isAlreadySelected
+          ? selectedDates.filter(
+              (date) => date.toDateString() !== value.toDateString()
+            )
+          : [...selectedDates, value];
 
-      onDatesChange(newSelectedDates);
+        onDatesChange(newSelectedDates);
+      }
     }
   };
 
@@ -91,7 +96,7 @@ const BookingCalendar = ({
           pointer-events: none !important;
         }
         .react-calendar__tile--selected {
-          background-color: #10b981 !important;
+          background-color: #8b5cf6 !important;
           color: white !important;
         }
         .react-calendar__tile:hover:not(.react-calendar__tile--booked) {
@@ -112,12 +117,12 @@ const BookingCalendar = ({
           font-weight: 500 !important;
         }
         .react-calendar__month-view__days {
-        display: grid !important;
-        grid-template-columns: repeat(7, 1fr) !important; /* 7 columns for 7 days */
-        gap: 2px; /* optional spacing */
+          display: grid !important;
+          grid-template-columns: repeat(7, 1fr) !important;
+          gap: 2px;
         }
         .react-calendar__tile--weekend {
-        color: inherit !important; /* keep normal text color */
+          color: inherit !important;
         }
         .react-calendar__navigation button:hover {
           background-color: #e5e7eb !important;
