@@ -9,16 +9,12 @@ import HotelDetailsPage from "./components/hotelDetails";
 import ToursPage from "./pages/toursPage";
 import TourDetailsPage from "./components/tourDetails";
 import Footer from "./components/footer";
-import TranslationWidget from "./components/translationWidget";
 import AdminPanel from "./pages/adminPanel";
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40">
-        <TranslationWidget />
-      </div>
       <main className="pt-18 pb-80">
         <Routes>
           <Route path="/" element={<HomePage />} />
