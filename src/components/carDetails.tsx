@@ -7,6 +7,7 @@ import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 import { carAPI, type Car } from "../API";
 import BookingCalendar from "./bookingCalendar";
+import BookingPopup from "./bookingPopup";
 
 const CarDetailsPage = () => {
   const { id } = useParams();
@@ -17,10 +18,9 @@ const CarDetailsPage = () => {
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [booking, setBooking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showBookingPopup, setShowBookingPopup] = useState(false);
 
-  // Photo carousel states
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   useEffect(() => {
@@ -77,28 +77,36 @@ const CarDetailsPage = () => {
     return t.steering[steeringType as keyof typeof t.steering] || steeringType;
   };
 
-  const handleBooking = async () => {
-    if (!car?._id || selectedDates.length === 0) return;
+  const extractNumericPrice = (priceString: string): number => {
+    const match = priceString.match(/(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  };
 
-    try {
-      setBooking(true);
-      const dates = selectedDates.map(
-        (date) => date.toISOString().split("T")[0]
-      );
-      const updatedCar = await carAPI.book(car._id, dates);
-      setCar(updatedCar);
-      setSelectedDates([]);
-      alert(t.bookingSuccess || "Booking successful!");
-    } catch (err) {
-      console.error(err);
-      alert(t.bookingError || "Failed to book. Please try again.");
-    } finally {
-      setBooking(false);
-    }
+  const calculateTotalPrice = (): string => {
+    if (!car?.newPrice || selectedDates.length === 0) return "";
+    const dailyPrice = extractNumericPrice(car.newPrice);
+    const total = dailyPrice * selectedDates.length;
+    return `${total}$`;
+  };
+
+  const handleBooking = () => {
+    if (!car?._id || selectedDates.length === 0) return;
+    setShowBookingPopup(true);
   };
 
   const handleClearSelectedDates = () => {
     setSelectedDates([]);
+  };
+
+  const handleClosePopup = () => {
+    setShowBookingPopup(false);
+  };
+
+  const handleBookingSuccess = async () => {
+    console.log("Car booked successfully!");
+    setShowBookingPopup(false);
+    setSelectedDates([]);
+    await fetchCarDetails();
   };
 
   if (loading) {
@@ -130,6 +138,11 @@ const CarDetailsPage = () => {
   }
 
   const currentPhoto = car.photos[currentPhotoIndex];
+
+  // Format selected dates for the popup
+  const selectedDatesStrings = selectedDates.map((date) =>
+    date.toLocaleDateString()
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white p-6">
@@ -359,14 +372,14 @@ const CarDetailsPage = () => {
 
             <button
               onClick={handleBooking}
-              disabled={selectedDates.length === 0 || booking}
+              disabled={selectedDates.length === 0}
               className={`w-full py-4 px-6 font-bold rounded-xl transition text-sm sm:text-base ${
-                selectedDates.length > 0 && !booking
+                selectedDates.length > 0
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 shadow-lg"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              {booking ? t.booking || "Booking..." : t.bookNow || "Book Now"}
+              {t.bookNow || "Book Now"}
             </button>
 
             {selectedDates.length === 0 && (
@@ -378,6 +391,18 @@ const CarDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      <BookingPopup
+        isOpen={showBookingPopup}
+        onClose={handleClosePopup}
+        selectedDates={selectedDatesStrings}
+        itemName={car?.name}
+        pricePerDay={car?.newPrice}
+        totalPrice={calculateTotalPrice()}
+        itemId={car?._id}
+        itemType="car"
+        onBookingSuccess={handleBookingSuccess}
+      />
     </div>
   );
 };

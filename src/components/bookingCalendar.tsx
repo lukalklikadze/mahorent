@@ -1,5 +1,6 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useEffect, useState } from "react";
 
 type Value = Date | null;
 type ValuePiece = Date | null;
@@ -17,9 +18,35 @@ const BookingCalendar = ({
   selectedDates,
   singleDateMode = false,
 }: BookingCalendarProps) => {
+  const [calendarKey, setCalendarKey] = useState(0);
+
+  useEffect(() => {
+    setCalendarKey((prev) => prev + 1);
+  }, [bookedDates]);
+
+  const normalizeDateString = (dateInput: string | Date): string => {
+    try {
+      const date =
+        typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+      if (isNaN(date.getTime())) {
+        console.warn("Invalid date:", dateInput);
+        return "";
+      }
+      return date.toISOString().split("T")[0];
+    } catch (error) {
+      console.warn("Error normalizing date:", dateInput, error);
+      return "";
+    }
+  };
+
+  const normalizedBookedDates = bookedDates
+    .map(normalizeDateString)
+    .filter((date) => date !== "");
+
   const isDateBooked = (date: Date): boolean => {
-    const dateString = date.toISOString().split("T")[0];
-    return bookedDates.includes(dateString);
+    const dateString = normalizeDateString(date);
+    const isBooked = normalizedBookedDates.includes(dateString);
+    return isBooked;
   };
 
   const isDateSelected = (date: Date): boolean => {
@@ -59,6 +86,7 @@ const BookingCalendar = ({
   return (
     <div className="calendar-container">
       <Calendar
+        key={calendarKey}
         onChange={handleDateChange}
         value={selectedDates[0] || new Date()}
         minDate={new Date()}

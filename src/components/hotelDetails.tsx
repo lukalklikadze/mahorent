@@ -7,6 +7,7 @@ import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 import { hotelAPI, type Hotel } from "../API";
 import BookingCalendar from "./bookingCalendar";
+import BookingPopup from "./bookingPopup";
 
 const HotelDetailsPage = () => {
   const { id } = useParams();
@@ -17,8 +18,8 @@ const HotelDetailsPage = () => {
   const [hotel, setHotel] = useState<Hotel | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [booking, setBooking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showBookingPopup, setShowBookingPopup] = useState(false);
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
@@ -66,28 +67,37 @@ const HotelDetailsPage = () => {
     setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % hotel.photos.length);
   };
 
-  const handleBooking = async () => {
-    if (!hotel?._id || selectedDates.length === 0) return;
+  const extractNumericPrice = (priceString: string): number => {
+    const match = priceString.match(/(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  };
 
-    try {
-      setBooking(true);
-      const dates = selectedDates.map(
-        (date) => date.toISOString().split("T")[0]
-      );
-      const updatedHotel = await hotelAPI.book(hotel._id, dates);
-      setHotel(updatedHotel);
-      setSelectedDates([]);
-      alert(t.bookingSuccess || "Booking successful!");
-    } catch (err) {
-      console.error(err);
-      alert(t.bookingError || "Failed to book. Please try again.");
-    } finally {
-      setBooking(false);
-    }
+  const calculateTotalPrice = (): string => {
+    if (!hotel?.newPrice || selectedDates.length === 0) return "";
+    const dailyPrice = extractNumericPrice(hotel.newPrice);
+    const total = dailyPrice * selectedDates.length;
+    return `${total}$`;
+  };
+
+  const handleBooking = () => {
+    if (!hotel?._id || selectedDates.length === 0) return;
+    setShowBookingPopup(true);
   };
 
   const handleClearSelectedDates = () => {
     setSelectedDates([]);
+  };
+
+  const handleClosePopup = () => {
+    setShowBookingPopup(false);
+  };
+
+  // Handle successful booking - refresh data and clear selected dates
+  const handleBookingSuccess = async () => {
+    console.log("Hotel booked successfully!");
+    setShowBookingPopup(false);
+    setSelectedDates([]); // Clear selected dates
+    await fetchHotelDetails(); // Refresh hotel data to get updated booked dates
   };
 
   if (loading) {
@@ -121,6 +131,10 @@ const HotelDetailsPage = () => {
   }
 
   const currentPhoto = hotel.photos[currentPhotoIndex];
+
+  const selectedDatesStrings = selectedDates.map((date) =>
+    date.toLocaleDateString()
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-yellow-50 to-white p-6">
@@ -288,9 +302,7 @@ const HotelDetailsPage = () => {
               <span className="text-xl sm:text-2xl text-yellow-600 font-bold">
                 {hotel.newPrice}
               </span>
-              <span className="text-sm text-gray-600">
-                / {t.person || "person"}
-              </span>
+              <span className="text-sm text-gray-600">/ {t.day}</span>
             </div>
           </div>
 
@@ -357,14 +369,14 @@ const HotelDetailsPage = () => {
 
             <button
               onClick={handleBooking}
-              disabled={selectedDates.length === 0 || booking}
+              disabled={selectedDates.length === 0}
               className={`w-full py-4 px-6 font-bold rounded-xl transition text-sm sm:text-base ${
-                selectedDates.length > 0 && !booking
+                selectedDates.length > 0
                   ? "bg-gradient-to-r from-yellow-600 to-amber-600 text-white hover:from-yellow-700 hover:to-amber-700 transform hover:scale-105 shadow-lg"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              {booking ? t.booking || "Booking..." : t.bookNow || "Book Now"}
+              {t.bookNow || "Book Now"}
             </button>
 
             {selectedDates.length === 0 && (
@@ -376,6 +388,18 @@ const HotelDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      <BookingPopup
+        isOpen={showBookingPopup}
+        onClose={handleClosePopup}
+        selectedDates={selectedDatesStrings}
+        itemName={hotel?.name}
+        pricePerDay={hotel?.newPrice}
+        totalPrice={calculateTotalPrice()}
+        itemId={hotel?._id}
+        itemType="hotel"
+        onBookingSuccess={handleBookingSuccess}
+      />
     </div>
   );
 };

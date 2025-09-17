@@ -27,13 +27,12 @@ const TourCard = ({ id, photo, name, prevPrice, newPrice }: TourCardProps) => {
       <h2 className="text-base md:text-lg lg:text-xl font-semibold text-center mb-2 px-4">
         {name}
       </h2>
-      <p className="text-lg text-gray-700 mb-6">{t.perPerson}</p>
       <div className="flex items-center gap-2 mb-4">
         <span className="text-sm md:text-base text-red-500 line-through">
           {prevPrice}
         </span>
         <span className="text-sm md:text-base text-green-600 font-bold">
-          {newPrice}
+          {newPrice} / {t.perPerson}
         </span>
       </div>
       <span className="px-4 py-2 bg-purple-600 text-white rounded-full font-medium text-sm hover:bg-purple-700 transition mb-3">

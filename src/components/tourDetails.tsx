@@ -4,6 +4,7 @@ import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 import { tourAPI, type Tour } from "../API";
 import BookingCalendar from "./bookingCalendar";
+import BookingPopup from "./bookingPopup";
 
 const TourDetailsPage = () => {
   const { id } = useParams();
@@ -14,8 +15,8 @@ const TourDetailsPage = () => {
   const [tour, setTour] = useState<Tour | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [booking, setBooking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showBookingPopup, setShowBookingPopup] = useState(false);
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
@@ -61,22 +62,14 @@ const TourDetailsPage = () => {
     setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % tour.photos.length);
   };
 
-  const handleBooking = async () => {
-    if (!tour?._id || !selectedDate) return;
+  const calculateTotalPrice = (): string => {
+    if (!tour?.newPrice || !selectedDate) return "";
+    return tour.newPrice;
+  };
 
-    try {
-      setBooking(true);
-      const dateString = selectedDate.toISOString().split("T")[0];
-      const updatedTour = await tourAPI.book(tour._id, [dateString]);
-      setTour(updatedTour);
-      setSelectedDate(null);
-      alert(t.bookingSuccess || "Booking successful!");
-    } catch (err) {
-      console.error(err);
-      alert(t.bookingError || "Failed to book. Please try again.");
-    } finally {
-      setBooking(false);
-    }
+  const handleBooking = () => {
+    if (!tour?._id || !selectedDate) return;
+    setShowBookingPopup(true);
   };
 
   const handleClearSelectedDate = () => {
@@ -89,6 +82,18 @@ const TourDetailsPage = () => {
     } else {
       setSelectedDate(null);
     }
+  };
+
+  const handleClosePopup = () => {
+    setShowBookingPopup(false);
+  };
+
+  // Handle successful booking - refresh data and clear selected date
+  const handleBookingSuccess = async () => {
+    console.log("Tour booked successfully!");
+    setShowBookingPopup(false);
+    setSelectedDate(null); // Clear selected date
+    await fetchTourDetails(); // Refresh tour data to get updated booked dates
   };
 
   if (loading) {
@@ -122,6 +127,10 @@ const TourDetailsPage = () => {
   }
 
   const currentPhoto = tour.photos[currentPhotoIndex];
+
+  const selectedDatesStrings = selectedDate
+    ? [selectedDate.toLocaleDateString()]
+    : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white p-6">
@@ -251,9 +260,7 @@ const TourDetailsPage = () => {
               <span className="text-xl sm:text-2xl text-purple-600 font-bold">
                 {tour.newPrice}
               </span>
-              <span className="text-sm text-gray-600">
-                / {t.person || "person"}
-              </span>
+              <span className="text-sm text-gray-600">/ {t.perPerson}</span>
             </div>
           </div>
 
@@ -316,14 +323,14 @@ const TourDetailsPage = () => {
 
             <button
               onClick={handleBooking}
-              disabled={!selectedDate || booking}
+              disabled={!selectedDate}
               className={`w-full py-4 px-6 font-bold rounded-xl transition text-sm sm:text-base ${
-                selectedDate && !booking
+                selectedDate
                   ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700 transform hover:scale-105 shadow-lg"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              {booking ? t.booking || "Booking..." : t.bookNow || "Book Now"}
+              {t.bookNow || "Book Now"}
             </button>
 
             {!selectedDate && (
@@ -334,6 +341,18 @@ const TourDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      <BookingPopup
+        isOpen={showBookingPopup}
+        onClose={handleClosePopup}
+        selectedDates={selectedDatesStrings}
+        itemName={tour?.name}
+        pricePerDay={tour?.newPrice}
+        totalPrice={calculateTotalPrice()}
+        itemId={tour?._id}
+        itemType="tour"
+        onBookingSuccess={handleBookingSuccess}
+      />
     </div>
   );
 };

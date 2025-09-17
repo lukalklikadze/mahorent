@@ -87,7 +87,7 @@ const HotelCard = ({
           {prevPrice}
         </span>
         <span className="text-sm md:text-base text-green-600 font-bold">
-          {newPrice} / {t.person}
+          {newPrice} / {t.day}
         </span>
       </div>
     </Link>

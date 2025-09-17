@@ -94,7 +94,7 @@ const CarCard = ({
           {prevPrice}
         </span>
         <span className="text-sm md:text-base text-green-600 font-bold">
-          {newPrice}
+          {newPrice} / {t.day}
         </span>
       </div>
     </Link>
