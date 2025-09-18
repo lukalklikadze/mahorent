@@ -8,6 +8,7 @@ import useLanguage from "../hooks/useLanguage";
 import { carAPI, type Car } from "../API";
 import BookingCalendar from "./bookingCalendar";
 import BookingPopup from "./bookingPopup";
+import { formatDateForDisplay } from "../utils";
 
 const CarDetailsPage = () => {
   const { id } = useParams();
@@ -139,9 +140,8 @@ const CarDetailsPage = () => {
 
   const currentPhoto = car.photos[currentPhotoIndex];
 
-  // Format selected dates for the popup
   const selectedDatesStrings = selectedDates.map((date) =>
-    date.toLocaleDateString()
+    formatDateForDisplay(date)
   );
 
   return (
@@ -339,7 +339,7 @@ const CarDetailsPage = () => {
                       key={index}
                       className="px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-xs sm:text-sm font-medium"
                     >
-                      {date.toLocaleDateString()}
+                      {formatDateForDisplay(date)}
                     </span>
                   ))}
                 </div>

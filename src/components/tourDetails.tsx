@@ -5,6 +5,7 @@ import useLanguage from "../hooks/useLanguage";
 import { tourAPI, type Tour } from "../API";
 import BookingCalendar from "./bookingCalendar";
 import BookingPopup from "./bookingPopup";
+import { formatDateForDisplay } from "../utils";
 
 const TourDetailsPage = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const TourDetailsPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showBookingPopup, setShowBookingPopup] = useState(false);
+  const [numberOfPeople, setNumberOfPeople] = useState(1);
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
@@ -64,6 +66,14 @@ const TourDetailsPage = () => {
 
   const calculateTotalPrice = (): string => {
     if (!tour?.newPrice || !selectedDate) return "";
+    // Extract numeric value from price string and multiply by number of people
+    const priceMatch = tour.newPrice.match(/(\d+)/);
+    if (priceMatch) {
+      const basePrice = parseInt(priceMatch[1]);
+      const totalPrice = basePrice * numberOfPeople;
+      // Replace the number in the original string with the total
+      return tour.newPrice.replace(/\d+/, totalPrice.toString());
+    }
     return tour.newPrice;
   };
 
@@ -93,7 +103,15 @@ const TourDetailsPage = () => {
     console.log("Tour booked successfully!");
     setShowBookingPopup(false);
     setSelectedDate(null); // Clear selected date
+    setNumberOfPeople(1); // Reset people count
     await fetchTourDetails(); // Refresh tour data to get updated booked dates
+  };
+
+  const handlePeopleChange = (change: number) => {
+    const newCount = numberOfPeople + change;
+    if (newCount >= 1 && newCount <= 9) {
+      setNumberOfPeople(newCount);
+    }
   };
 
   if (loading) {
@@ -128,8 +146,9 @@ const TourDetailsPage = () => {
 
   const currentPhoto = tour.photos[currentPhotoIndex];
 
+  // Format selected dates for the popup using the formatter
   const selectedDatesStrings = selectedDate
-    ? [selectedDate.toLocaleDateString()]
+    ? [formatDateForDisplay(selectedDate)]
     : [];
 
   return (
@@ -266,8 +285,56 @@ const TourDetailsPage = () => {
 
           <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-purple-100">
             <h2 className="text-xl sm:text-2xl font-bold mb-6 text-purple-800 text-center">
-              {t.selectDate || "Select Date"}
+              {t.bookYourTour || "Book Your Tour"}
             </h2>
+
+            {/* People Selector */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-purple-800">
+                {t.numberOfPeople || "Number of People"}
+              </h3>
+              <div className="flex items-center justify-center gap-4 p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <button
+                  onClick={() => handlePeopleChange(-1)}
+                  disabled={numberOfPeople <= 1}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition ${
+                    numberOfPeople <= 1
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-purple-200 text-purple-800 hover:bg-purple-300"
+                  }`}
+                >
+                  -
+                </button>
+
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-800">
+                    {numberOfPeople}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {numberOfPeople === 1 ? t.person : t.people}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => handlePeopleChange(1)}
+                  disabled={numberOfPeople >= 9}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition ${
+                    numberOfPeople >= 9
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-purple-200 text-purple-800 hover:bg-purple-300"
+                  }`}
+                >
+                  +
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 text-center mt-2">
+                {t.maxPeople || "Maximum 9 people per booking"}
+              </p>
+            </div>
+
+            <h3 className="text-lg font-semibold mb-3 text-purple-800">
+              {t.selectDate || "Select Date"}
+            </h3>
 
             <BookingCalendar
               bookedDates={tour.bookedDates || []}
@@ -279,9 +346,9 @@ const TourDetailsPage = () => {
             {selectedDate && (
               <div className="mb-6 mt-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-sm sm:text-base text-purple-800">
+                  <h4 className="font-semibold text-sm sm:text-base text-purple-800">
                     {t.selectedDate || "Selected Date"}:
-                  </h3>
+                  </h4>
                   <button
                     onClick={handleClearSelectedDate}
                     className="px-3 py-1 text-xs sm:text-sm bg-purple-200 text-purple-800 rounded-md hover:bg-purple-300 transition font-medium"
@@ -291,8 +358,26 @@ const TourDetailsPage = () => {
                 </div>
                 <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
                   <span className="px-3 py-1 bg-purple-200 text-purple-800 rounded-full text-xs sm:text-sm font-medium">
-                    {selectedDate.toLocaleDateString()}
+                    {formatDateForDisplay(selectedDate)}
                   </span>
+                </div>
+              </div>
+            )}
+
+            {/* Total Price Display */}
+            {selectedDate && (
+              <div className="mb-6 p-4 bg-gradient-to-r from-purple-100 to-violet-100 rounded-xl border border-purple-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-purple-700">
+                    {t.totalPrice || "Total Price"}:
+                  </span>
+                  <span className="text-xl font-bold text-purple-800">
+                    {calculateTotalPrice()}
+                  </span>
+                </div>
+                <div className="text-xs text-purple-600 mt-1">
+                  {numberOfPeople} {numberOfPeople === 1 ? t.person : t.people}{" "}
+                  × {tour.newPrice}
                 </div>
               </div>
             )}
@@ -351,6 +436,7 @@ const TourDetailsPage = () => {
         totalPrice={calculateTotalPrice()}
         itemId={tour?._id}
         itemType="tour"
+        numberOfPeople={numberOfPeople}
         onBookingSuccess={handleBookingSuccess}
       />
     </div>

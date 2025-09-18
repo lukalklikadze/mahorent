@@ -8,6 +8,7 @@ import useLanguage from "../hooks/useLanguage";
 import { hotelAPI, type Hotel } from "../API";
 import BookingCalendar from "./bookingCalendar";
 import BookingPopup from "./bookingPopup";
+import { formatDateForDisplay } from "../utils";
 
 const HotelDetailsPage = () => {
   const { id } = useParams();
@@ -133,7 +134,7 @@ const HotelDetailsPage = () => {
   const currentPhoto = hotel.photos[currentPhotoIndex];
 
   const selectedDatesStrings = selectedDates.map((date) =>
-    date.toLocaleDateString()
+    formatDateForDisplay(date)
   );
 
   return (
@@ -336,7 +337,7 @@ const HotelDetailsPage = () => {
                       key={index}
                       className="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs sm:text-sm font-medium"
                     >
-                      {date.toLocaleDateString()}
+                      {formatDateForDisplay(date)}
                     </span>
                   ))}
                 </div>

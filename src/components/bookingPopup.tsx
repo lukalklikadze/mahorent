@@ -11,6 +11,7 @@ type BookingPopupProps = {
   totalPrice?: string;
   itemId?: string;
   itemType?: "car" | "hotel" | "tour";
+  numberOfPeople?: number;
   onBookingSuccess?: () => void;
 };
 
@@ -22,6 +23,7 @@ const BookingPopup = ({
   totalPrice = "",
   itemId = "",
   itemType,
+  numberOfPeople = 1,
   onBookingSuccess,
 }: BookingPopupProps) => {
   const [formData, setFormData] = useState({
@@ -67,22 +69,29 @@ const BookingPopup = ({
 
   const sendEmailNotification = async () => {
     try {
+      const emailData: Record<string, unknown> = {
+        name: formData.name,
+        surname: formData.surname,
+        phone: formData.phone,
+        email: formData.email,
+        total_price: totalPrice,
+        number_of_days: selectedDates.length,
+        dates: selectedDates.join(", "),
+        item: itemName,
+        item_type: itemType,
+        item_id: itemId,
+        to_email: "lukaliko24@gmail.com",
+      };
+
+      // Add number of people only for tours
+      if (itemType === "tour") {
+        emailData.number_of_people = numberOfPeople;
+      }
+
       await emailjs.send(
         "service_afgxdjj",
         "template_mz6zi0n",
-        {
-          name: formData.name,
-          surname: formData.surname,
-          phone: formData.phone,
-          email: formData.email,
-          total_price: totalPrice,
-          number_of_days: selectedDates.length,
-          dates: selectedDates.join(", "),
-          item: itemName,
-          item_type: itemType,
-          item_id: itemId,
-          to_email: "lukaliko24@gmail.com",
-        },
+        emailData,
         "MqCigwjvzDCoFzGZn"
       );
     } catch (error) {
@@ -252,6 +261,17 @@ const BookingPopup = ({
             </div>
           )}
 
+          {itemType === "tour" && numberOfPeople > 1 && (
+            <div className="text-sm text-gray-700 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex justify-between">
+                <span className="font-medium">Number of People:</span>
+                <span>
+                  {numberOfPeople} {numberOfPeople === 1 ? "person" : "people"}
+                </span>
+              </div>
+            </div>
+          )}
+
           {selectedDates.length > 0 && (
             <div className="text-sm text-gray-700 p-3 bg-gray-50 rounded-lg border border-gray-200">
               <div className="font-medium mb-1">
@@ -271,6 +291,14 @@ const BookingPopup = ({
                   {selectedDates.length}
                 </span>
               </div>
+              {itemType === "tour" && numberOfPeople > 1 && (
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-600">People:</span>
+                  <span className="font-medium text-blue-700">
+                    {numberOfPeople}
+                  </span>
+                </div>
+              )}
               <hr className="my-2 border-blue-200" />
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-blue-800">Total:</span>
