@@ -252,6 +252,22 @@ export const translations = {
     faqContact: "How can I contact Maho Travel?",
     faqContactAnswer:
       "You can reach us at +995 597 56 13 05, email us at MahoTravel@gmail.com, or visit our office in Kutaisi, Georgia. We're here to assist with all your travel needs.",
+    // Date filter translations
+    filterByDates: "Filter by Available Dates",
+    showCalendar: "Show Calendar",
+    hideCalendar: "Hide Calendar",
+    selectedFilterDates: "Selected Filter Dates",
+    clearFilter: "Clear Filter",
+    showingAllCars: "Showing all cars",
+    showingAllHotels: "Showing all hotels",
+    showingFilteredCars: "available cars for selected dates",
+    showingFilteredHotels: "available hotels for selected dates",
+    noCarsAvailable: "No Cars Available",
+    noHotelsAvailable: "No Hotels Available",
+    noCarsAvailableMessage:
+      "No cars are available for your selected dates. Try different dates or clear the filter.",
+    noHotelsAvailableMessage:
+      "No hotels are available for your selected dates. Try different dates or clear the filter.",
   },
   ka: {
     welcome: "კეთილი იყოს თქვენი მობრძანება Maho Travel-ში!",
@@ -503,6 +519,22 @@ export const translations = {
     faqContact: "როგორ შემიძლია Maho Travel-ს დაკავშირება?",
     faqContactAnswer:
       "შეგიძლიათ დაგვიკავშირდეთ ნომერზე +995 597 56 13 05, გამოგვიგზავნოთ იმეილი MahoTravel@gmail.com-ზე, ან ეწვიოთ ჩვენს ოფისს ქუთაისში, საქართველოში. ჩვენ ვართ აქ თქვენი ყველა სამოგზაურო საჭიროების დასახმარებლად.",
+    // Date filter translations
+    filterByDates: "ხელმისაწვდომი თარიღების ფილტრი",
+    showCalendar: "კალენდრის ნახვა",
+    hideCalendar: "კალენდრის დამალვა",
+    selectedFilterDates: "არჩეული ფილტრის თარიღები",
+    clearFilter: "ფილტრის გასუფთავება",
+    showingAllCars: "ყველა მანქანის ნახვა",
+    showingAllHotels: "ყველა სასტუმროს ნახვა",
+    showingFilteredCars: "ხელმისაწვდომი მანქანები არჩეულ თარიღებზე",
+    showingFilteredHotels: "ხელმისაწვდომი სასტუმროები არჩეულ თარიღებზე",
+    noCarsAvailable: "მანქანები მიუწვდომელია",
+    noHotelsAvailable: "სასტუმროები მიუწვდომელია",
+    noCarsAvailableMessage:
+      "არჩეულ თარიღებზე მანქანები არ არის ხელმისაწვდომი. სცადეთ სხვა თარიღები ან გაასუფთავეთ ფილტრი.",
+    noHotelsAvailableMessage:
+      "არჩეულ თარიღებზე სასტუმროები არ არის ხელმისაწვდომი. სცადეთ სხვა თარიღები ან გაასუფთავეთ ფილტრი.",
   },
   ru: {
     welcome: "Добро пожаловать в Maho Travel!",
@@ -759,5 +791,21 @@ export const translations = {
     faqContact: "Как я могу связаться с Maho Travel?",
     faqContactAnswer:
       "Вы можете связаться с нами по телефону +995 597 56 13 05, отправить email на MahoTravel@gmail.com, или посетить наш офис в Кутаиси, Грузия. Мы здесь, чтобы помочь со всеми вашими туристическими потребностями.",
+    // Date filter translations
+    filterByDates: "Фильтр по доступным датам",
+    showCalendar: "Показать календарь",
+    hideCalendar: "Скрыть календарь",
+    selectedFilterDates: "Выбранные даты фильтра",
+    clearFilter: "Очистить фильтр",
+    showingAllCars: "Показано все автомобили",
+    showingAllHotels: "Показаны все отели",
+    showingFilteredCars: "доступных автомобилей на выбранные даты",
+    showingFilteredHotels: "доступных отелей на выбранные даты",
+    noCarsAvailable: "Автомобили недоступны",
+    noHotelsAvailable: "Отели недоступны",
+    noCarsAvailableMessage:
+      "На выбранные даты автомобили недоступны. Попробуйте другие даты или очистите фильтр.",
+    noHotelsAvailableMessage:
+      "На выбранные даты отели недоступны. Попробуйте другие даты или очистите фильтр.",
   },
 };
