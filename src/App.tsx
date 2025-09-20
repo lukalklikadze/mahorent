@@ -11,7 +11,7 @@ const ToursPage = lazy(() => import("./pages/toursPage"));
 const CarDetailsPage = lazy(() => import("./components/carDetails"));
 const HotelDetailsPage = lazy(() => import("./components/hotelDetails"));
 const TourDetailsPage = lazy(() => import("./components/tourDetails"));
-const AdminPanel = lazy(() => import("./pages/adminPanel"));
+const AdminWrapper = lazy(() => import("./components/adminWrapper"));
 const FAQPage = lazy(() => import("./pages/faqPage"));
 
 const LoadingSpinner = () => (
@@ -34,11 +34,8 @@ function App() {
             <Route path="/hotels/:id" element={<HotelDetailsPage />} />
             <Route path="/tours" element={<ToursPage />} />
             <Route path="/tours/:id" element={<TourDetailsPage />} />
-            <Route path="/faq" element={<FAQPage />} /> {/* Add this line */}
-            <Route
-              path="/secret-admin-panel-andria22"
-              element={<AdminPanel />}
-            />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/admin_panel" element={<AdminWrapper />} />
           </Routes>
         </Suspense>
       </main>

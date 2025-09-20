@@ -5,7 +5,11 @@ import TourForm from "../components/tourForm";
 import MessageDisplay from "../components/messageDisplay";
 import TabNavigation from "../components/tabNavigation";
 
-const AdminPanel = () => {
+interface AdminPanelProps {
+  onLogout: () => void;
+}
+
+const AdminPanel = ({ onLogout }: AdminPanelProps) => {
   const [activeTab, setActiveTab] = useState<"cars" | "hotels" | "tours">(
     "cars"
   );
@@ -42,7 +46,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6 mt-10">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -51,6 +55,12 @@ const AdminPanel = () => {
           <p className="text-gray-600">
             Manage your cars, hotels, and tours easily
           </p>
+          <button
+            onClick={onLogout}
+            className="mt-3 bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
+          >
+            🚪 Logout
+          </button>
         </div>
 
         <MessageDisplay message={message} onClose={closeMessage} />

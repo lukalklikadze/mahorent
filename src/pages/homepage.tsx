@@ -11,7 +11,9 @@ const HomePage = () => {
   const { lang } = useLanguage();
   const t = translations[lang];
   const [isTermsOpen, setIsTermsOpen] = useState(false);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     const hasSeenTerms = sessionStorage.getItem("hasSeenTerms");
 
