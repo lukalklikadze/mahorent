@@ -83,17 +83,17 @@ const BookingPopup = ({
         to_email: "lukaliko24@gmail.com",
       };
 
-      // Add number of people only for tours
       if (itemType === "tour") {
         emailData.number_of_people = numberOfPeople;
       }
 
       await emailjs.send(
-        "service_afgxdjj",
-        "template_mz6zi0n",
+        "service_8wj3dfa",
+        "template_k3aat9i",
         emailData,
-        "MqCigwjvzDCoFzGZn"
+        "wdouXTwDj_a0iRnlM"
       );
+      console.log("Email sent successfully");
     } catch (error) {
       console.error("Email sending error:", error);
       throw new Error("Failed to send email notification");

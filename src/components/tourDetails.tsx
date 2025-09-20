@@ -21,11 +21,16 @@ const TourDetailsPage = () => {
   const [numberOfPeople, setNumberOfPeople] = useState(1);
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     fetchTourDetails();
   }, [id]);
 
+  useEffect(() => {
+    console.log(tour?.bookedDates);
+  }, [tour?.bookedDates]);
   useEffect(() => {
     if (!tour?.photos || tour.photos.length <= 1) return;
 
@@ -66,13 +71,12 @@ const TourDetailsPage = () => {
 
   const calculateTotalPrice = (): string => {
     if (!tour?.newPrice || !selectedDate) return "";
-    // Extract numeric value from price string and multiply by number of people
     const priceMatch = tour.newPrice.match(/(\d+)/);
     if (priceMatch) {
       const basePrice = parseInt(priceMatch[1]);
       const totalPrice = basePrice * numberOfPeople;
-      // Replace the number in the original string with the total
-      return tour.newPrice.replace(/\d+/, totalPrice.toString());
+
+      return `${totalPrice}$`;
     }
     return tour.newPrice;
   };
@@ -88,7 +92,7 @@ const TourDetailsPage = () => {
 
   const handleDateChange = (dates: Date[]) => {
     if (dates.length > 0) {
-      setSelectedDate(dates[dates.length - 1]); // Take the most recently selected date
+      setSelectedDate(dates[dates.length - 1]);
     } else {
       setSelectedDate(null);
     }
@@ -98,13 +102,12 @@ const TourDetailsPage = () => {
     setShowBookingPopup(false);
   };
 
-  // Handle successful booking - refresh data and clear selected date
   const handleBookingSuccess = async () => {
     console.log("Tour booked successfully!");
     setShowBookingPopup(false);
-    setSelectedDate(null); // Clear selected date
-    setNumberOfPeople(1); // Reset people count
-    await fetchTourDetails(); // Refresh tour data to get updated booked dates
+    setSelectedDate(null);
+    setNumberOfPeople(1);
+    await fetchTourDetails();
   };
 
   const handlePeopleChange = (change: number) => {
@@ -146,7 +149,6 @@ const TourDetailsPage = () => {
 
   const currentPhoto = tour.photos[currentPhotoIndex];
 
-  // Format selected dates for the popup using the formatter
   const selectedDatesStrings = selectedDate
     ? [formatDateForDisplay(selectedDate)]
     : [];
@@ -341,6 +343,7 @@ const TourDetailsPage = () => {
               selectedDates={selectedDate ? [selectedDate] : []}
               onDatesChange={handleDateChange}
               singleDateMode={true}
+              theme="purple"
             />
 
             {selectedDate && (
@@ -364,7 +367,6 @@ const TourDetailsPage = () => {
               </div>
             )}
 
-            {/* Total Price Display */}
             {selectedDate && (
               <div className="mb-6 p-4 bg-gradient-to-r from-purple-100 to-violet-100 rounded-xl border border-purple-200">
                 <div className="flex items-center justify-between">

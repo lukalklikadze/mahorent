@@ -3,7 +3,7 @@ import WhatsappLogo from "../assets/Whatsapp.svg";
 import TelegramLogo from "../assets/Telegram.svg";
 import SocialsContact from "./socialsContact";
 import TranslationWidget from "./translationWidget";
-import logoSrc from "../assets/MahorentLogo.png";
+import logoSrc from "../assets/ MahoTravel.svg";
 
 const Header = () => {
   const navigate = useNavigate();

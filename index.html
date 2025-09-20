@@ -1,10 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <link rel="preconnect" href="https://maps.googleapis.com" />
+  <link rel="dns-prefetch" href="https://maps.googleapis.com" />
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <link
+      rel="shortcut icon"
+      href="/src/assets/favicon.ico"
+      type="image/x-icon"
+    />
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/src/assets/android-chrome-192x192.svg"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/src/assets/apple-touch-icon.svg"
+    />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>MahoTravel - Car Rentals, Hotels & Tours in Georgia</title>
+    <meta
+      name="description"
+      content="car rentals, hotels, and guided tours in Georgia. Book your perfect travel experience with MahoTravel - your trusted travel partner."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "MahoTravel",
+        "description": "car rentals, hotels, and guided tours in Georgia",
+        "url": "https://yourdomain.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "Georgia"
+        },
+        "offers": [
+          {
+            "@type": "Service",
+            "name": "Car Rental",
+            "description": "car rental services"
+          },
+          {
+            "@type": "Service",
+            "name": "Hotel Booking",
+            "description": "hotel accommodations"
+          },
+          {
+            "@type": "Service",
+            "name": "Tour Packages",
+            "description": "Guided tours and travel packages"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

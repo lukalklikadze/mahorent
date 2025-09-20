@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import GearsLogo from "../assets/GearsLogo.png";
-import GasLogo from "../assets/GasLogo.png";
-import WheelLogo from "../assets/WheelLogo.png";
+import SettingsIcon from "../assets/Settings.svg";
+import FuelIcon from "../assets/Fuel.svg";
+import ShipWheelIcon from "../assets/Wheel.svg";
 import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 
@@ -62,17 +62,19 @@ const CarCard = ({
       <div className="flex justify-around w-full mb-4">
         <div className="flex items-center gap-1">
           <img
-            src={GasLogo}
+            src={FuelIcon}
             alt="Fuel"
-            className="w-5 h-5 md:w-8 md:h-8 rounded-full"
+            className="w-5 h-5 md:w-5 md:h-5"
+            style={{ filter: "hue-rotate(120deg) saturate(1.5)" }} // Green tint
           />
           <span className="text-xs md:text-sm">{getTranslatedFuel(fuel)}</span>
         </div>
         <div className="flex items-center gap-1">
           <img
-            src={GearsLogo}
-            alt="Gears"
-            className="w-5 h-5 md:w-8 md:h-8 rounded-full"
+            src={SettingsIcon}
+            alt="Settings"
+            className="w-5 h-5 md:w-5 md:h-5"
+            style={{ filter: "hue-rotate(240deg) saturate(1.5)" }} // Blue tint
           />
           <span className="text-xs md:text-sm">
             {getTranslatedGears(gearsType)}
@@ -80,9 +82,10 @@ const CarCard = ({
         </div>
         <div className="flex items-center gap-1">
           <img
-            src={WheelLogo}
-            alt="Steering"
-            className="w-5 h-5 md:w-8 md:h-8 rounded-full"
+            src={ShipWheelIcon}
+            alt="Steering Wheel"
+            className="w-5 h-5 md:w-5 md:h-5"
+            style={{ filter: "hue-rotate(30deg) saturate(1.5)" }} // Orange tint
           />
           <span className="text-xs md:text-sm">
             {getTranslatedSteering(steeringWheelSide)}

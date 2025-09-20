@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import GearsLogo from "../assets/GearsLogo.png";
-import GasLogo from "../assets/GasLogo.png";
-import WheelLogo from "../assets/WheelLogo.png";
+import SettingsIcon from "../assets/Settings.svg";
+import FuelIcon from "../assets/Fuel.svg";
+import ShipWheelIcon from "../assets/Wheel.svg";
 import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 import { carAPI, type Car } from "../API";
@@ -23,7 +23,9 @@ const CarDetailsPage = () => {
   const [showBookingPopup, setShowBookingPopup] = useState(false);
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     fetchCarDetails();
   }, [id]);
@@ -265,12 +267,13 @@ const CarDetailsPage = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
-              <div className="flex items-center gap-3 justify-center sm:justify-start">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <div className="flex items-center gap-3">
                 <img
-                  src={GasLogo}
+                  src={FuelIcon}
                   alt="Fuel"
                   className="w-6 h-6 sm:w-8 sm:h-8"
+                  style={{ filter: "hue-rotate(120deg) saturate(1.5)" }} // Green tint
                 />
                 <span className="text-sm sm:text-base font-medium text-blue-800">
                   {getTranslatedFuel(car.fuel)}
@@ -278,9 +281,10 @@ const CarDetailsPage = () => {
               </div>
               <div className="flex items-center gap-3 justify-center sm:justify-start">
                 <img
-                  src={GearsLogo}
-                  alt="Gears"
+                  src={SettingsIcon}
+                  alt="Settings"
                   className="w-6 h-6 sm:w-8 sm:h-8"
+                  style={{ filter: "hue-rotate(240deg) saturate(1.5)" }} // Blue tint
                 />
                 <span className="text-sm sm:text-base font-medium text-blue-800">
                   {getTranslatedGears(car.gearsType)}
@@ -288,9 +292,10 @@ const CarDetailsPage = () => {
               </div>
               <div className="flex items-center gap-3 justify-center sm:justify-start">
                 <img
-                  src={WheelLogo}
-                  alt="Steering"
+                  src={ShipWheelIcon}
+                  alt="Steering Wheel"
                   className="w-6 h-6 sm:w-8 sm:h-8"
+                  style={{ filter: "hue-rotate(30deg) saturate(1.5)" }} // Orange tint
                 />
                 <span className="text-sm sm:text-base font-medium text-blue-800">
                   {getTranslatedSteering(car.steeringWheelSide)}
@@ -318,6 +323,7 @@ const CarDetailsPage = () => {
               bookedDates={car.bookedDates || []}
               selectedDates={selectedDates}
               onDatesChange={setSelectedDates}
+              theme="blue"
             />
 
             {selectedDates.length > 0 && (

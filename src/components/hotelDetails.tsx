@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import BathroomLogo from "../assets/BathroomLogo.png";
-import BedroomLogo from "../assets/BedroomLogo.png";
-import BedLogo from "../assets/BedLogo.png";
+import BathIcon from "../assets/Bath.svg";
+import BedDoubleIcon from "../assets/BedDouble.svg";
+import BedIcon from "../assets/Bed.svg";
 import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 import { hotelAPI, type Hotel } from "../API";
@@ -23,7 +23,9 @@ const HotelDetailsPage = () => {
   const [showBookingPopup, setShowBookingPopup] = useState(false);
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     fetchHotelDetails();
   }, [id]);
@@ -93,12 +95,11 @@ const HotelDetailsPage = () => {
     setShowBookingPopup(false);
   };
 
-  // Handle successful booking - refresh data and clear selected dates
   const handleBookingSuccess = async () => {
     console.log("Hotel booked successfully!");
     setShowBookingPopup(false);
-    setSelectedDates([]); // Clear selected dates
-    await fetchHotelDetails(); // Refresh hotel data to get updated booked dates
+    setSelectedDates([]);
+    await fetchHotelDetails();
   };
 
   if (loading) {
@@ -263,12 +264,13 @@ const HotelDetailsPage = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-              <div className="flex items-center gap-3 justify-center sm:justify-start">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+              <div className="flex items-center gap-3">
                 <img
-                  src={BedroomLogo}
+                  src={BedDoubleIcon}
                   alt="Bedrooms"
                   className="w-6 h-6 sm:w-8 sm:h-8"
+                  style={{ filter: "hue-rotate(280deg) saturate(1.5)" }} // Purple tint
                 />
                 <span className="text-sm sm:text-base font-medium text-yellow-800">
                   {hotel.bedrooms} {t.bedrooms || "Bedrooms"}
@@ -276,9 +278,10 @@ const HotelDetailsPage = () => {
               </div>
               <div className="flex items-center gap-3 justify-center sm:justify-start">
                 <img
-                  src={BedLogo}
+                  src={BedIcon}
                   alt="Beds"
                   className="w-6 h-6 sm:w-8 sm:h-8"
+                  style={{ filter: "hue-rotate(240deg) saturate(1.5)" }} // Blue tint
                 />
                 <span className="text-sm sm:text-base font-medium text-yellow-800">
                   {hotel.beds} {t.beds || "Beds"}
@@ -286,9 +289,10 @@ const HotelDetailsPage = () => {
               </div>
               <div className="flex items-center gap-3 justify-center sm:justify-start">
                 <img
-                  src={BathroomLogo}
+                  src={BathIcon}
                   alt="Bathrooms"
                   className="w-6 h-6 sm:w-8 sm:h-8"
+                  style={{ filter: "hue-rotate(180deg) saturate(1.5)" }} // Cyan tint
                 />
                 <span className="text-sm sm:text-base font-medium text-yellow-800">
                   {hotel.bathrooms} {t.bathrooms || "Bathrooms"}
@@ -316,6 +320,7 @@ const HotelDetailsPage = () => {
               bookedDates={hotel.bookedDates || []}
               selectedDates={selectedDates}
               onDatesChange={setSelectedDates}
+              theme="yellow"
             />
 
             {selectedDates.length > 0 && (

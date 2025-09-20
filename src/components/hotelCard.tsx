@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import BathroomLogo from "../assets/BathroomLogo.png";
-import BedroomLogo from "../assets/BedroomLogo.png";
-import BedLogo from "../assets/BedLogo.png";
+import BathIcon from "../assets/Bath.svg";
+import BedDoubleIcon from "../assets/BedDouble.svg";
+import BedIcon from "../assets/Bed.svg";
 import { translations } from "../translations";
 import useLanguage from "../hooks/useLanguage";
 
@@ -52,25 +52,32 @@ const HotelCard = ({
       <div className="flex justify-around w-full mb-4">
         <div className="flex items-center gap-1">
           <img
-            src={BedroomLogo}
+            src={BedDoubleIcon}
             alt="Bedrooms"
-            className="w-7 h-7 md:w-8 md:h-8"
+            className="w-5 h-5 md:w-5 md:h-5"
+            style={{ filter: "hue-rotate(280deg) saturate(1.5)" }} // Purple tint
           />
           <span className="text-xs md:text-sm">
             {bedrooms} {t.bedrooms}
           </span>
         </div>
         <div className="flex items-center gap-1">
-          <img src={BedLogo} alt="Beds" className="w-5 h-5 md:w-6 md:h-6" />
+          <img
+            src={BedIcon}
+            alt="Beds"
+            className="w-5 h-5 md:w-5 md:h-5"
+            style={{ filter: "hue-rotate(240deg) saturate(1.5)" }} // Blue tint
+          />
           <span className="text-xs md:text-sm">
             {beds} {t.beds}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <img
-            src={BathroomLogo}
+            src={BathIcon}
             alt="Bathrooms"
-            className="w-5 h-5 md:w-6 md:h-6"
+            className="w-5 h-5 md:w-5 md:h-5"
+            style={{ filter: "hue-rotate(180deg) saturate(1.5)" }} // Cyan tint
           />
           <span className="text-xs md:text-sm">
             {bathrooms} {t.bathrooms}
