@@ -1,2 +1,6 @@
+# Allow all search engines to crawl the site
 User-agent: *
-Allow: /
+Disallow:
+
+# Location of your sitemap
+Sitemap: https://www.mahotravel.com/sitemap.xml

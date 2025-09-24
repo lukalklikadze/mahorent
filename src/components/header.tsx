@@ -8,7 +8,7 @@ import logoSrc from "../assets/ MahoTravel.svg";
 const Header = () => {
   const navigate = useNavigate();
   const whatsappUrl = "https://wa.me/995597561305?text=Hello%20there";
-  const telegramUrl = "https://t.me/Guido_Gallagher";
+  const telegramUrl = "https://t.me/Maho_Travel";
   const whatsappName = "(+995) 597 56 13 05";
   const telegramName = "@Maho_Travel";
 
