@@ -1,69 +1,89 @@
-# React + TypeScript + Vite
+MahoTravel 🌍✈️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern tourism platform offering car rentals, hotel bookings, and guided tours with a seamless user experience. Built using React, TypeScript, Tailwind CSS, MongoDB, and deployed on DigitalOcean.
 
-Currently, two official plugins are available:
+🔗 Live Website: mahotravel.com
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Features
 
-## Expanding the ESLint configuration
+Car, Hotel, and Tour Booking – Simple and intuitive booking process.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Embedded Calendar System – Users can view availability and book dates directly.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Automated Email Notifications – Booking confirmations and updates powered by EmailJS.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Admin Dashboard – Manage bookings, cars, hotels, and tours with ease.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Modern UI/UX – Responsive, clean, and accessible design with Tailwind CSS.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Secure & Scalable Backend – MongoDB and Node.js provide robust data management.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Full Deployment – Production-ready, deployed on DigitalOcean with HTTPS.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🛠️ Tech Stack
+
+Frontend: React + TypeScript + Vite + Tailwind CSS
+Backend: Node.js + Express + MongoDB
+Email Service: EmailJS
+
+Deployment: DigitalOcean (Droplet + Nginx + SSL)
+
+📂 Project Structure
+mahotravel/
+├── backend/ # Express + MongoDB backend
+│ ├── models/ # Database models
+│ ├── routes/ # API routes
+│ ├── controllers/ # Logic for routes
+│ ├── .env # Environment variables (not committed)
+│ └── server.js # Backend entry point
+│
+├── public/ # Static assets
+├── src/ # React + TypeScript frontend
+│ ├── assets/ # Images, icons
+│ ├── components/ # Reusable UI components
+│ ├── context/ # React context providers
+│ ├── hooks/ # Custom hooks
+│ ├── pages/ # App pages (Home, Booking, Admin, etc.)
+│ ├── App.tsx # Main App component
+│ └── main.tsx # React entry point
+│
+├── package.json  
+└── README.md
+
+⚙️ Setup & Installation
+
+Clone the repo:
+
+git clone https://github.com/lukalklikadze/mahorent.git
+cd mahotravel
+
+1. Backend Setup
+   cd backend
+   npm install
+
+Create a .env file inside backend/ with the following:
+
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_secret_key
+EMAILJS_SERVICE_ID=your_emailjs_service_id
+EMAILJS_TEMPLATE_ID=your_emailjs_template_id
+EMAILJS_PUBLIC_KEY=your_emailjs_public_key
+
+Run backend:
+
+npm run dev
+
+2. Frontend Setup
+   cd ..
+   npm install
+   npm run dev
+
+Frontend will run on http://localhost:5173
+and backend on http://localhost:5000
+(or your configured port).
+
+📌 Roadmap
+Payment gateway integration (Stripe/PayPal)
+
+👨‍💻 Author
+Built by Luka Liklikadze 🚀
